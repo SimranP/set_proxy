@@ -2,6 +2,7 @@
 driver:
   name: vagrant
 
+
 provisioner:
   name: chef_zero
   # You may wish to disable always updating cookbooks in CI or other testing environments.
@@ -13,13 +14,41 @@ verifier:
   name: inspec
 
 platforms:
-  - name: ubuntu-16.04
-  - name: centos-7.2
+  - name: server
+    driver:
+      box: bento/centos-7.2
+    run_list:
+      - recipe[set_proxy::server]
+    driver_config:
+      customize:
+        memory: 1024
+      network:
+        - ['private_network', {ip: '192.168.100.2'}]
+
+  - name: linux_node
+    driver:
+      box: bento/centos-7.2
+    run_list:
+      - recipe[set_proxy::linux_node]
+    driver_config:
+      network:
+        - ['private_network', {ip: '192.168.100.3'}]
+
+  - name: windows_node
+    transport:
+        name: winrm
+    driver:
+      box: windows-2012r2
+    run_list:
+      - recipe[set_proxy::windows_node]
+    driver_config:
+      network:
+        - ['private_network', {ip: '192.168.100.4'}]
 
 suites:
-  - name: default
+  - name: set_proxy
     run_list:
-      - recipe[set_proxy::default]
+      - []
     verifier:
       inspec_tests:
         - test/recipes

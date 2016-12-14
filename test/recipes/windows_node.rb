@@ -1,6 +1,6 @@
 # # encoding: utf-8
 
-# Inspec test for recipe set_proxy::default
+# Inspec test for recipe .::windows_node
 
 # The Inspec reference, with examples and extensive documentation, can be
 # found at https://docs.chef.io/inspec_reference.html
@@ -16,12 +16,3 @@ describe port(80) do
   it { should_not be_listening }
   skip 'This is an example test, replace with your own test.'
 end
-
-describe os_env('http_proxy') do
-	its('content') { should eq "http://192.168.100.2" }
-end
-
-describe os_env('https_proxy') do
-	its('content') { should eq "https://192.168.100.2" }
-end
-
